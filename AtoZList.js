@@ -19,7 +19,10 @@ import {
   TouchableWithoutFeedback,
   View,
   Platform,
+  Dimensions
 } from 'react-native';
+
+const {height} = Dimensions.get('window')
 
 import _ from 'lodash';
 import FixedHeightWindowedListView from './FixedHeightWindowedListView';
@@ -34,7 +37,6 @@ export default class AtoZList extends Component {
     renderCell: PropTypes.func,
     renderSection: PropTypes.func,
     onEndReached: PropTypes.func,
-    onScroll: PropTypes.func,
   };
 
   constructor(props, context) {
@@ -72,33 +74,27 @@ export default class AtoZList extends Component {
 
 
   render() {
-    this._alphabetInstance = (
-      <View style={styles.alphabetSidebar}>
-        <AlphabetPicker alphabet={this.state.alphabet} onTouchLetter={this._onTouchLetter.bind(this)} />
-      </View>
-    );
-
     return (
-      <View style={{flex: 1}}>
-        <View style={styles.container}>
-          <FixedHeightWindowedListView
-            ref={view => this._listView = view}
-            dataSource={this.state.dataSource}
-            renderCell={this.props.renderCell}
-            renderSectionHeader={this.props.renderSection}
-            incrementDelay={16}
-            initialNumToRender={8}
-            pageSize={Platform.OS === 'ios' ? 15 : 8}
-            maxNumToRender={70}
-            numToRenderAhead={40}
-            numToRenderBehind={4}
-            onEndReached={this.props.onEndReached}
-            onScroll={this.props.onScroll}
-          />
-        </View>
-        {this._alphabetInstance}
-      </View>
-    );
+      <View style={{height: height - 210}}>
+  <View style={styles.container}>
+  <FixedHeightWindowedListView
+    onIndexChange={this.props.onIndexChange}
+    ref={view => this._listView = view}
+    dataSource={this.state.dataSource}
+    renderCell={this.props.renderCell}
+    renderSectionHeader={this.props.renderSection}
+    incrementDelay={16}
+    initialNumToRender={8}
+    pageSize={Platform.OS === 'ios' ? 15 : 8}
+    maxNumToRender={70}
+    numToRenderAhead={40}
+    numToRenderBehind={4}
+    onEndReached={this.props.onEndReached}
+    />
+    </View>
+    {this._alphabetInstance}
+  </View>
+  );
   }
 
   _onTouchLetter(letter) {
@@ -113,7 +109,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingTop: 0,
-    backgroundColor: '#fff',
+    backgroundColor: 'transparent'
   },
   alphabetSidebar: {
     position: 'absolute',

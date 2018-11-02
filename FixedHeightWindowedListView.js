@@ -108,15 +108,15 @@ export default class FixedHeightWindowedListView extends Component {
 
     return (
       <ScrollView
-        scrollEventThrottle={50}
-        removeClippedSubviews={this.props.numToRenderAhead === 0 ? false : true}
-        automaticallyAdjustContentInsets={false}
-        {...this.props}
-        ref={(ref) => { this.scrollRef = ref; }}
-        onScroll={this.__onScroll}>
-        {rows}
-      </ScrollView>
-    );
+    scrollEventThrottle={50}
+    removeClippedSubviews={this.props.numToRenderAhead === 0 ? false : true}
+    automaticallyAdjustContentInsets={false}
+    {...this.props}
+    ref={(ref) => { this.scrollRef = ref; }}
+    onScroll={this.__onScroll}>
+    {rows}
+  </ScrollView>
+  );
   }
 
   getScrollResponder() {
@@ -192,7 +192,7 @@ export default class FixedHeightWindowedListView extends Component {
 
   scrollWithoutAnimationTo(destY, destX) {
     this.scrollRef &&
-      this.scrollRef.scrollTo({ y: destY, x: destX, animated: false });
+    this.scrollRef.scrollTo({ y: destY, x: destX, animated: false });
 
   }
 
@@ -228,12 +228,12 @@ export default class FixedHeightWindowedListView extends Component {
       }
 
       rows.push(
-        <CellRenderer
-          key={key}
-          shouldUpdate={data !== this.__rowCache[key]}
-          render={this.__renderRow.bind(this, data, parentSectionId, idx, key)}
-        />
-      );
+      <CellRenderer
+      key={key}
+      shouldUpdate={data !== this.__rowCache[key]}
+      render={this.__renderRow.bind(this, data, parentSectionId, idx, key)}
+      />
+    );
 
       this.__rowCache[key] = data;
     }
@@ -263,9 +263,6 @@ export default class FixedHeightWindowedListView extends Component {
         // ScrollEnd
         this.props.onEndReached(e);
       }
-    }
-    if (this.props.onScroll) {
-      this.props.onScroll(e);
     }
   }
 
@@ -342,6 +339,9 @@ export default class FixedHeightWindowedListView extends Component {
       totalRows,
     });
 
+    if (this.props.onIndexChange) {
+      this.props.onIndexChange(firstVisible)
+    }
     this.setState({firstRow, lastRow});
 
     // Keep enqueuing updates until we reach the targetLastRow or
@@ -364,15 +364,15 @@ export default class FixedHeightWindowedListView extends Component {
 
     if (bufferFirstRow !== null && bufferFirstRow < firstRow) {
       spacerMidHeight = this.props.dataSource.
-        getHeightBetweenRows(bufferLastRow, firstRow);
+      getHeightBetweenRows(bufferLastRow, firstRow);
 
       let bufferHeight = this.props.dataSource.
-        getHeightBetweenRows(bufferFirstRow - 1, bufferLastRow + 1);
+      getHeightBetweenRows(bufferFirstRow - 1, bufferLastRow + 1);
 
       spacerTopHeight -= (spacerMidHeight + bufferHeight);
     } else if (bufferFirstRow !== null && bufferFirstRow > lastRow) {
       spacerMidHeight = this.props.dataSource.
-        getHeightBetweenRows(lastRow, bufferFirstRow);
+      getHeightBetweenRows(lastRow, bufferFirstRow);
 
       spacerBottomHeight -= spacerMidHeight;
     }
@@ -398,7 +398,6 @@ FixedHeightWindowedListView.propTypes = {
   numToRenderBehind: PropTypes.number,
   pageSize: PropTypes.number,
   onEndReached: PropTypes.func,
-  onScroll: PropTypes.func,
 };
 
 FixedHeightWindowedListView.defaultProps = {
