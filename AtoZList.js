@@ -6,7 +6,7 @@
  */
 'use strict';
 
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {
   AppRegistry,
@@ -36,7 +36,7 @@ export default class AtoZList extends Component {
     data: PropTypes.object.isRequired,
     renderCell: PropTypes.func,
     renderSection: PropTypes.func,
-    onEndReached: PropTypes.func,
+    onEndReached: PropTypes.func
   };
 
   constructor(props, context) {
@@ -59,12 +59,13 @@ export default class AtoZList extends Component {
       alphabet: Object.keys(this.props.data)
     };
 
+    this.pageSize = Platform.OS === 'ios' ? 15 : 8
     this.dataSource = dataSource;
   }
 
 
   componentWillReceiveProps(nextProps) {
-    if(this.props.data !== nextProps.data){
+    if (this.props.data !== nextProps.data) {
       this.setState({
         dataSource: this.dataSource.cloneWithCellsAndSections(nextProps.data),
         alphabet: Object.keys(nextProps.data)
@@ -74,36 +75,42 @@ export default class AtoZList extends Component {
 
 
   render() {
+    const pageSize = (typeof this.props.pageSize !== 'undefined')
+      ? this.props.pageSize
+      : this.pageSize
+    const initialNumToRender = (
+      typeof this.props.initialNumToRender !== 'undefined'
+    )
+      ? this.props.initialNumToRender
+      : 8
+
     return (
       <View style={{height: height - 210}}>
-  <View style={styles.container}>
-  <FixedHeightWindowedListView
-    onIndexChange={this.props.onIndexChange}
-    ref={view => this._listView = view}
-    dataSource={this.state.dataSource}
-    renderCell={this.props.renderCell}
-    renderSectionHeader={this.props.renderSection}
-    incrementDelay={16}
-    initialNumToRender={8}
-    pageSize={Platform.OS === 'ios' ? 15 : 8}
-    maxNumToRender={70}
-    numToRenderAhead={40}
-    numToRenderBehind={4}
-    onEndReached={this.props.onEndReached}
-    />
-    </View>
-    {this._alphabetInstance}
-  </View>
-  );
+        <View style={styles.container}>
+          <FixedHeightWindowedListView
+            onIndexChange={this.props.onIndexChange}
+            ref={view => this._listView = view}
+            dataSource={this.state.dataSource}
+            renderCell={this.props.renderCell}
+            renderSectionHeader={this.props.renderSection}
+            incrementDelay={16}
+            initialNumToRender={initialNumToRender}
+            pageSize={pageSize}
+            maxNumToRender={70}
+            numToRenderAhead={40}
+            numToRenderBehind={10}
+            onEndReached={this.props.onEndReached}
+          />
+        </View>
+        {this._alphabetInstance}
+      </View>
+    );
   }
 
   _onTouchLetter(letter) {
     this._listView.scrollToSectionBuffered(letter);
   }
 }
-
-
-
 
 const styles = StyleSheet.create({
   container: {
@@ -118,7 +125,7 @@ const styles = StyleSheet.create({
     bottom: 0,
     right: 0,
     justifyContent: 'center',
-    alignItems: 'center',
-  },
+    alignItems: 'center'
+  }
 });
 
