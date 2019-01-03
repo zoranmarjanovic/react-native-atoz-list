@@ -100,6 +100,7 @@ export default class AtoZList extends Component {
             numToRenderAhead={40}
             numToRenderBehind={10}
             onEndReached={this.props.onEndReached}
+            contentContainerStyle={this.props.contentContainerStyle}
           />
         </View>
         {this._alphabetInstance}
